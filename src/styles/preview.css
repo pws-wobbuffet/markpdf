@@ -1,177 +1,125 @@
-/* ── Prose styles for the markdown preview ──
-   The preview pane is always white regardless of app theme,
-   because it represents the document as it will print.       */
-.prose {
-  max-width: 740px;
-  margin: 0 auto;
-  padding: 32px 40px 80px;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 16px;
-  line-height: 1.7;
-  color: #24292f;
-}
-
-.prose h1, .prose h2, .prose h3,
-.prose h4, .prose h5, .prose h6 {
-  font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
-  margin-top: 1.5em;
-  margin-bottom: 0.5em;
-  font-weight: 700;
-  line-height: 1.25;
-  color: #1f2328;
-}
-
-.prose h1 { font-size: 2em;   padding-bottom: 0.3em; border-bottom: 1px solid #d1d9e0; }
-.prose h2 { font-size: 1.5em; padding-bottom: 0.3em; border-bottom: 1px solid #d1d9e0; }
-.prose h3 { font-size: 1.25em; }
-.prose h4 { font-size: 1em; }
-
-.prose p { margin: 0 0 1em; }
-
-.prose a { color: #0969da; text-decoration: underline; }
-
-.prose strong { font-weight: 700; }
-.prose em { font-style: italic; }
-
-.prose ul, .prose ol { padding-left: 2em; margin: 0 0 1em; }
-.prose li { margin-bottom: 0.25em; }
-.prose li > ul, .prose li > ol { margin-top: 0.25em; }
-
-.prose blockquote {
-  margin: 0 0 1em;
-  padding: 0 1em;
-  border-left: 4px solid #d1d9e0;
-  color: #57606a;
-}
-
-.prose code {
-  font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
-  font-size: 87%;
-  background: rgba(175, 184, 193, 0.2);
-  padding: 0.15em 0.4em;
-  border-radius: 4px;
-}
-
-.prose pre {
-  font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
-  background: #f6f8fa;
-  border: 1px solid #d1d9e0;
-  border-radius: 6px;
-  padding: 16px;
-  overflow-x: auto;
-  margin: 0 0 1em;
-  font-size: 87%;
-  line-height: 1.5;
-  white-space: pre;         /* normal screen view: horizontal scroll */
-}
-
-.prose pre code {
-  background: transparent;
-  padding: 0;
-  font-size: inherit;
-  color: inherit;
-  border-radius: 0;
-}
-
-.prose hr {
-  border: none;
-  border-top: 2px solid #d1d9e0;
-  margin: 1.5em 0;
-}
-
-.prose table {
-  border-collapse: collapse;
-  margin: 0 0 1em;
+/* ── Preview sheet — the rendered document ── */
+.sheet {
+  background: var(--paper);
   width: 100%;
-  display: table;           /* proper table layout, not block */
-  font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
-  font-size: 14px;
+  max-width: 620px;
+  padding: 44px 48px;
+  font-family: "Newsreader", Georgia, serif;
+  color: var(--fg);
+  line-height: 1.7;
+  font-size: 16px;
+  border-radius: 4px;
+  align-self: start;
 }
-.prose th, .prose td { border: 1px solid #d1d9e0; padding: 8px 14px; text-align: left; }
-.prose th { background: #f6f8fa; font-weight: 600; }
-.prose tr:nth-child(even) td { background: #fafafa; }
 
-.prose img { max-width: 100%; border-radius: 6px; }
+/* Paper style variants */
+.sheet.bordered { border: 1px solid var(--line); }
+.sheet.shadowed { border: 1px solid var(--line); box-shadow: 0 12px 32px -12px rgba(0,0,0,0.18); }
+html[data-theme="dark"] .sheet.shadowed { box-shadow: 0 16px 40px -16px rgba(0,0,0,0.5); }
+
+/* Headings use Space Grotesk */
+.sheet h1 {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-weight: 700; font-size: 32px; letter-spacing: -0.025em; line-height: 1.1;
+  margin: 0 0 16px; color: var(--fg);
+}
+.sheet h2 {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-weight: 600; font-size: 21px; letter-spacing: -0.015em;
+  margin: 32px 0 12px; color: var(--fg);
+}
+.sheet h3 {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-weight: 600; font-size: 17px; margin: 24px 0 10px; color: var(--fg);
+}
+.sheet h4 { font-family: "Space Grotesk", sans-serif; font-weight: 600; font-size: 15px; margin: 20px 0 8px; }
+
+.sheet p { margin: 0 0 15px; }
+.sheet a { color: var(--accent); text-decoration: underline; }
+.sheet strong { font-weight: 600; }
+.sheet em { font-style: italic; }
+
+.sheet ul, .sheet ol { margin: 0 0 15px; padding-left: 22px; }
+.sheet li { margin-bottom: 6px; }
+.sheet li::marker { color: var(--accent); }
+
+.sheet blockquote {
+  margin: 0 0 16px;
+  padding: 2px 0 2px 18px;
+  border-left: 2px solid var(--line-strong);
+  color: var(--fg-soft);
+  font-style: italic;
+}
+
+.sheet code {
+  font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  font-size: 0.82em;
+  background: var(--code-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--fg);
+}
+
+.sheet pre {
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  overflow-x: auto;
+  margin: 0 0 16px;
+  white-space: pre;
+}
+.sheet pre code { background: none; padding: 0; font-size: 12.5px; line-height: 1.7; color: var(--fg); border-radius: 0; }
+
+.sheet table {
+  border-collapse: collapse; margin: 0 0 16px; width: 100%;
+  font-family: "Space Grotesk", system-ui, sans-serif; font-size: 14px; display: table;
+}
+.sheet th, .sheet td { border: 1px solid var(--line); padding: 9px 14px; text-align: left; }
+.sheet th { background: var(--paper-2); font-weight: 600; }
+
+.sheet hr { border: none; border-top: 1px solid var(--line); margin: 26px 0; }
+.sheet img { max-width: 100%; border-radius: 6px; }
 
 /* ── Print styles ── */
 @media print {
-  /* Hide all app chrome; only the preview content prints */
-  .toolbar, .sidebar, .editor-pane, .divider,
-  .mobile-tabs, .pane-label { display: none !important; }
+  .toolbar, .pane.docs, .pane-head, .tweaks { display: none !important; }
 
-  html, body {
-    overflow: visible !important;
-    height: auto !important;
-    background: #fff !important;
+  html, body { overflow: visible !important; height: auto !important; background: #fff !important; }
+
+  .app, .main-area, .pane-body {
+    display: block !important; height: auto !important; overflow: visible !important;
   }
 
-  .app, .main-area, .pane-area {
-    display: block !important;
-    height: auto !important;
-    overflow: visible !important;
+  .pane { display: none !important; }
+  .pane:last-child { display: block !important; border: none !important; }
+
+  .preview-wrap { display: block !important; padding: 0 !important; background: #fff !important; }
+
+  .sheet {
+    max-width: none !important; width: 100% !important; padding: 0 !important;
+    border: none !important; box-shadow: none !important; border-radius: 0 !important;
+    font-size: 11pt; line-height: 1.6; color: #000 !important; background: #fff !important;
   }
 
-  .preview-pane {
-    display: block !important;
-    width: 100% !important;
-    height: auto !important;
-    overflow: visible !important;
-    background: #ffffff !important;
-    border: none !important;
+  .sheet h1 { font-size: 22pt; color: #000 !important; }
+  .sheet h2 { font-size: 17pt; color: #000 !important; }
+  .sheet h3 { font-size: 13pt; color: #000 !important; }
+  .sheet a { color: #000 !important; }
+
+  .sheet pre {
+    white-space: pre-wrap !important; word-break: break-all !important;
+    overflow: visible !important; background: #f6f4ef !important; border-color: #ccc !important;
+    font-size: 9pt !important; page-break-inside: avoid;
   }
-
-  .prose {
-    max-width: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    font-size: 11pt;
-    line-height: 1.6;
-    color: #000 !important;
-  }
-
-  .prose h1 { font-size: 22pt; }
-  .prose h2 { font-size: 17pt; }
-  .prose h3 { font-size: 13pt; }
-  .prose h4 { font-size: 11pt; }
-  .prose h1, .prose h2, .prose h3, .prose h4 { color: #000 !important; }
-
-  .prose a { color: #000 !important; text-decoration: underline; }
-
-  .prose pre {
-    white-space: pre-wrap !important;       /* wrap long lines in print */
-    word-break: break-all !important;
-    overflow: visible !important;
-    background: #f6f8fa !important;
-    border: 1px solid #ccc !important;
-    border-radius: 0 !important;
-    font-size: 9pt !important;
-    line-height: 1.4 !important;
-    page-break-inside: avoid;
-  }
-
-  .prose code {
-    font-size: 9pt !important;
-    background: rgba(0,0,0,0.06) !important;
-  }
-
-  .prose pre code {
-    background: transparent !important;
-    font-size: inherit !important;
-  }
-
-  .prose blockquote {
-    border-left-color: #999 !important;
-    color: #444 !important;
-    page-break-inside: avoid;
-  }
-
-  .prose table { font-size: 10pt; page-break-inside: avoid; }
-  .prose th, .prose td { border-color: #ccc !important; }
-  .prose th { background: #f0f0f0 !important; }
-
-  .prose img { page-break-inside: avoid; }
-
-  .prose h2, .prose h3 { page-break-after: avoid; }
+  .sheet pre code { font-size: inherit !important; }
+  .sheet code { background: rgba(0,0,0,0.05) !important; color: #000 !important; font-size: 9pt !important; }
+  .sheet blockquote { border-left-color: #aaa !important; color: #444 !important; }
+  .sheet th { background: #f6f4ef !important; }
+  .sheet th, .sheet td { border-color: #ccc !important; }
+  .sheet li::marker { color: #000 !important; }
+  .sheet h2, .sheet h3 { page-break-after: avoid; }
+  .sheet blockquote, .sheet table, .sheet img { page-break-inside: avoid; }
 
   @page { margin: 20mm; size: A4 portrait; }
 }
