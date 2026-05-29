@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 
-export default function Toolbar({ title, onTitleChange, onDownloadPDF, theme, onThemeToggle }) {
+export default function Toolbar({ title, onTitleChange, onDownloadPDF, theme, onThemeToggle, showPrintOptions, onTogglePrintOptions }) {
   const [editing, setEditing] = useState(false);
   const inputRef = useRef(null);
 
@@ -60,6 +60,20 @@ export default function Toolbar({ title, onTitleChange, onDownloadPDF, theme, on
             <path d="M21 13a8 8 0 1 1-10-10 7 7 0 0 0 10 10z"/>
           </svg>
         )}
+      </button>
+
+      {/* Settings icon — toggles PDF options panel */}
+      <button
+        className={`icon-btn${showPrintOptions ? ' icon-btn-active' : ''}`}
+        onClick={onTogglePrintOptions}
+        title="PDF options"
+        aria-label="PDF options"
+        aria-expanded={showPrintOptions}
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
       </button>
 
       <button className="btn-primary" onClick={onDownloadPDF}>

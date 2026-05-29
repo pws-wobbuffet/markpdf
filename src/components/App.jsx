@@ -3,6 +3,9 @@ import Toolbar from './Toolbar';
 import Sidebar from './Sidebar';
 import Editor from './Editor';
 import Preview from './Preview';
+import PrintOptionsPanel, {
+  DEFAULT_PRINT_OPTIONS, FONTS, SIZES, SPACINGS, MARGINS,
+} from './PrintOptionsPanel';
 
 const STORE_KEY = 'markpdf.docs';
 const ACTIVE_KEY = 'markpdf.activeId';
@@ -66,6 +69,22 @@ export default function App() {
     localStorage.setItem('markpdf.theme', theme);
   }, [theme]);
 
+  // Print options
+  const [printOptions, setPrintOptions] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('markpdf.print') || 'null') || DEFAULT_PRINT_OPTIONS; }
+    catch { return DEFAULT_PRINT_OPTIONS; }
+  });
+  const [showPrintOptions, setShowPrintOptions] = useState(false);
+
+  // Apply options to CSS vars so the preview and print both use them
+  useEffect(() => {
+    const r = document.documentElement;
+    r.style.setProperty('--sheet-body-font',   FONTS[printOptions.font]?.value    ?? FONTS.serif.value);
+    r.style.setProperty('--sheet-font-size',   SIZES[printOptions.size]?.value    ?? SIZES.md.value);
+    r.style.setProperty('--sheet-line-height', SPACINGS[printOptions.spacing]?.value ?? SPACINGS.regular.value);
+    localStorage.setItem('markpdf.print', JSON.stringify(printOptions));
+  }, [printOptions]);
+
   // Documents
   const [docs, setDocs] = useState(_loadDocs);
   const [activeId, setActiveId] = useState(() => _loadActiveId(_loadDocs()));
@@ -105,11 +124,23 @@ export default function App() {
   };
 
   const downloadPDF = () => {
+    // Inject @page margin dynamically — CSS variables can't reach @page rules
+    const marginMm = MARGINS[printOptions.margins]?.value ?? '20';
+    const pageStyle = document.createElement('style');
+    pageStyle.id = 'markpdf-page-override';
+    pageStyle.textContent = `@media print { @page { margin: ${marginMm}mm !important; } }`;
+    document.head.appendChild(pageStyle);
+
     const prev = document.title;
     document.title = activeDoc?.title || 'document';
     window.print();
-    const restore = () => { document.title = prev; window.removeEventListener('focus', restore); };
-    window.addEventListener('focus', restore);
+
+    const cleanup = () => {
+      document.title = prev;
+      pageStyle.remove();
+      window.removeEventListener('focus', cleanup);
+    };
+    window.addEventListener('focus', cleanup);
   };
 
   const lineCount = (activeDoc?.content ?? '').split('\n').length;
@@ -122,7 +153,17 @@ export default function App() {
         onDownloadPDF={downloadPDF}
         theme={theme}
         onThemeToggle={() => setTheme(t => t === 'dark' ? 'light' : 'dark')}
+        showPrintOptions={showPrintOptions}
+        onTogglePrintOptions={() => setShowPrintOptions(v => !v)}
       />
+
+      {showPrintOptions && (
+        <PrintOptionsPanel
+          options={printOptions}
+          onChange={setPrintOptions}
+          onClose={() => setShowPrintOptions(false)}
+        />
+      )}
 
       <div className="main-area">
         <Sidebar

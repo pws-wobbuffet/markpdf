@@ -4,10 +4,12 @@
   width: 100%;
   max-width: 620px;
   padding: 44px 48px;
-  font-family: "Newsreader", Georgia, serif;
+  /* These three are controlled by PDF options; CSS vars are set from JS.
+     Fallbacks match the original defaults so the app works without JS. */
+  font-family: var(--sheet-body-font, "Newsreader", Georgia, serif);
+  font-size:   var(--sheet-font-size, 16px);
+  line-height: var(--sheet-line-height, 1.7);
   color: var(--fg);
-  line-height: 1.7;
-  font-size: 16px;
   border-radius: 4px;
   align-self: start;
 }
@@ -139,5 +141,7 @@ html[data-theme="dark"] .sheet.shadowed { box-shadow: 0 16px 40px -16px rgba(0,0
   .sheet h2, .sheet h3, .sheet h4 { page-break-after: avoid; }
   .sheet blockquote, .sheet table, .sheet img { page-break-inside: avoid; }
 
-  @page { margin: 20mm; size: A4 portrait; }
+  /* @page margin is injected dynamically by downloadPDF() so the user's
+     chosen margin value takes effect. Fallback here for browser-initiated prints. */
+  @page { size: A4 portrait; }
 }
