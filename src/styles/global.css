@@ -275,68 +275,10 @@ html[data-theme="dark"] .doc-item:not(.active):hover { background: var(--line); 
   min-height: 100%;
 }
 
-/* ── Tweaks panel ── */
-.tweaks {
-  position: fixed;
-  right: 22px;
-  bottom: 22px;
-  width: 240px;
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  box-shadow: 0 10px 30px -10px rgba(0,0,0,0.18);
-  z-index: 50;
-  font-family: "Space Grotesk", sans-serif;
-  overflow: hidden;
-}
-html[data-theme="dark"] .tweaks { box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5); }
-
-.tweaks-head {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 14px;
-  cursor: pointer;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 10.5px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--fg-soft);
-  user-select: none;
-}
-.tweaks-head-border { border-bottom: 1px solid var(--line); }
-
-.tweaks-body { padding: 16px 14px; display: flex; flex-direction: column; gap: 18px; }
-
-.tw-label {
-  display: block;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--fg-faint); margin-bottom: 9px;
-}
-.tw-swatches { display: flex; gap: 8px; }
-.tw-sw {
-  width: 26px; height: 26px; border-radius: 50%; cursor: pointer;
-  border: 2px solid transparent; transition: transform 100ms ease;
-}
-.tw-sw:hover { transform: scale(1.1); }
-.tw-sw.active { box-shadow: 0 0 0 2px var(--paper), 0 0 0 3.5px var(--fg-soft); }
-
-.seg {
-  display: flex; background: var(--paper-2); border: 1px solid var(--line);
-  border-radius: 7px; overflow: hidden; padding: 2px; gap: 2px;
-}
-.seg button {
-  flex: 1; appearance: none; background: transparent; color: var(--fg-soft);
-  border: none; border-radius: 5px; padding: 7px 4px;
-  font-family: "JetBrains Mono", monospace; font-size: 10px;
-  letter-spacing: 0.02em; text-transform: uppercase; cursor: pointer;
-  transition: background 120ms ease, color 120ms ease;
-}
-.seg button.active { background: var(--paper); color: var(--fg); box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
-html[data-theme="dark"] .seg button.active { background: var(--line); }
-
 /* ── Mobile ── */
 @media (max-width: 900px) {
   .main-area { grid-template-columns: 1fr; grid-template-rows: auto auto auto; overflow: auto; }
   .pane { border-right: none; border-bottom: 1px solid var(--line); }
   body { overflow: auto; height: auto; }
   .app { height: auto; }
-  .tweaks { display: none; }
 }

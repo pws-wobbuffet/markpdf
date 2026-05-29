@@ -3,9 +3,7 @@ import Toolbar from './Toolbar';
 import Sidebar from './Sidebar';
 import Editor from './Editor';
 import Preview from './Preview';
-import TweaksPanel, { ACCENTS } from './TweaksPanel';
 
-// ── Storage helpers ──────────────────────────────────────────────────────────
 const STORE_KEY = 'markpdf.docs';
 const ACTIVE_KEY = 'markpdf.activeId';
 
@@ -57,18 +55,6 @@ function _loadActiveId(docs) {
   return docs.find(d => d.id === saved) ? saved : docs[0].id;
 }
 
-// ── Accent application ───────────────────────────────────────────────────────
-function applyAccent(accentId, dark) {
-  const a = ACCENTS.find(x => x.id === accentId);
-  if (!a) return;
-  const r = document.documentElement;
-  r.style.setProperty('--accent',      dark ? a.d    : a.l);
-  r.style.setProperty('--accent-ink',  dark ? a.inkD : a.inkL);
-  r.style.setProperty('--accent-soft', dark ? a.softD : a.softL);
-  r.style.setProperty('--syn-head',    dark ? a.d    : a.l);
-}
-
-// ── App ──────────────────────────────────────────────────────────────────────
 export default function App() {
   // Theme
   const [theme, setTheme] = useState(() => {
@@ -78,20 +64,7 @@ export default function App() {
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
     localStorage.setItem('markpdf.theme', theme);
-    applyAccent(accent, theme === 'dark');
-  }, [theme]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Tweaks
-  const [accent, setAccent] = useState(() => localStorage.getItem('markpdf.accent') || 'green');
-  const [paperStyle, setPaperStyle] = useState(() => localStorage.getItem('markpdf.paper') || 'shadowed');
-  const [density, setDensity] = useState(() => localStorage.getItem('markpdf.density') || 'regular');
-
-  useEffect(() => {
-    applyAccent(accent, theme === 'dark');
-    localStorage.setItem('markpdf.accent', accent);
-  }, [accent, theme]);
-  useEffect(() => { localStorage.setItem('markpdf.paper', paperStyle); }, [paperStyle]);
-  useEffect(() => { localStorage.setItem('markpdf.density', density); }, [density]);
+  }, [theme]);
 
   // Documents
   const [docs, setDocs] = useState(_loadDocs);
@@ -131,7 +104,6 @@ export default function App() {
     if (activeId === id) { setActiveId(next[0].id); localStorage.setItem(ACTIVE_KEY, next[0].id); }
   };
 
-  // PDF export
   const downloadPDF = () => {
     const prev = document.title;
     document.title = activeDoc?.title || 'document';
@@ -161,37 +133,18 @@ export default function App() {
           onDelete={deleteDoc}
         />
 
-        {/* Editor pane */}
         <section className="pane">
           <div className="pane-head">
             Markdown
             <span className="muted">{lineCount} lines</span>
           </div>
           <div className="pane-body" style={{ display: 'flex', flexDirection: 'column' }}>
-            <Editor
-              content={activeDoc?.content ?? ''}
-              onChange={updateContent}
-            />
+            <Editor content={activeDoc?.content ?? ''} onChange={updateContent} />
           </div>
         </section>
 
-        {/* Preview pane */}
-        <Preview
-          content={activeDoc?.content ?? ''}
-          paperStyle={paperStyle}
-          density={density}
-        />
+        <Preview content={activeDoc?.content ?? ''} />
       </div>
-
-      <TweaksPanel
-        accent={accent}
-        paperStyle={paperStyle}
-        density={density}
-        theme={theme}
-        onAccent={setAccent}
-        onPaper={setPaperStyle}
-        onDensity={setDensity}
-      />
     </div>
   );
 }
