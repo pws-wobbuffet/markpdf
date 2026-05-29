@@ -83,42 +83,60 @@ html[data-theme="dark"] .sheet.shadowed { box-shadow: 0 16px 40px -16px rgba(0,0
 
 /* ── Print styles ── */
 @media print {
-  .toolbar, .pane.docs, .pane-head, .tweaks { display: none !important; }
+  /* 1. Hide app chrome */
+  .toolbar, .pane.docs, .pane-head { display: none !important; }
 
-  html, body { overflow: visible !important; height: auto !important; background: #fff !important; }
-
+  /* 2. Reset layout so only the preview pane renders */
+  html, body { height: auto !important; overflow: visible !important; }
   .app, .main-area, .pane-body {
     display: block !important; height: auto !important; overflow: visible !important;
   }
-
   .pane { display: none !important; }
   .pane:last-child { display: block !important; border: none !important; }
-
   .preview-wrap { display: block !important; padding: 0 !important; background: #fff !important; }
 
+  /* 3. Force light-mode design tokens so dark-mode users get readable output.
+     Without this, html[data-theme="dark"] would apply and print dark-on-dark. */
+  :root {
+    --bg:          #f6f4ef !important;
+    --fg:          #1a1916 !important;
+    --fg-soft:     #6f6b62 !important;
+    --fg-faint:    #a8a399 !important;
+    --line:        #e2ddd3 !important;
+    --line-strong: #cfc9bc !important;
+    --paper:       #ffffff !important;
+    --paper-2:     #faf8f3 !important;
+    --accent:      #1a8a52 !important;
+    --accent-soft: #e8f3ec !important;
+    --code-bg:     #f6f4ef !important;
+    --radius:      8px     !important;
+    --syn-head:    #1a8a52 !important;
+    --syn-key:     #9333ea !important;
+    --syn-str:     #b45309 !important;
+  }
+
+  /* 4. Sheet: remove decorative chrome only.
+     font-family, font-size, line-height, color, list markers, blockquote,
+     code backgrounds — all inherited from .sheet above, nothing overridden. */
   .sheet {
-    max-width: none !important; width: 100% !important; padding: 0 !important;
-    border: none !important; box-shadow: none !important; border-radius: 0 !important;
-    font-size: 11pt; line-height: 1.6; color: #000 !important; background: #fff !important;
+    max-width: 100% !important;
+    width: 100%    !important;
+    padding: 0     !important;
+    border: none   !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
   }
 
-  .sheet h1 { font-size: 22pt; color: #000 !important; }
-  .sheet h2 { font-size: 17pt; color: #000 !important; }
-  .sheet h3 { font-size: 13pt; color: #000 !important; }
-  .sheet a { color: #000 !important; }
-
+  /* 5. Code blocks: wrap long lines (no horizontal scroll in print) */
   .sheet pre {
-    white-space: pre-wrap !important; word-break: break-all !important;
-    overflow: visible !important; background: #f6f4ef !important; border-color: #ccc !important;
-    font-size: 9pt !important; page-break-inside: avoid;
+    white-space: pre-wrap !important;
+    word-break: break-all !important;
+    overflow: visible    !important;
+    page-break-inside: avoid;
   }
-  .sheet pre code { font-size: inherit !important; }
-  .sheet code { background: rgba(0,0,0,0.05) !important; color: #000 !important; font-size: 9pt !important; }
-  .sheet blockquote { border-left-color: #aaa !important; color: #444 !important; }
-  .sheet th { background: #f6f4ef !important; }
-  .sheet th, .sheet td { border-color: #ccc !important; }
-  .sheet li::marker { color: #000 !important; }
-  .sheet h2, .sheet h3 { page-break-after: avoid; }
+
+  /* 6. Prevent awkward page breaks */
+  .sheet h2, .sheet h3, .sheet h4 { page-break-after: avoid; }
   .sheet blockquote, .sheet table, .sheet img { page-break-inside: avoid; }
 
   @page { margin: 20mm; size: A4 portrait; }
