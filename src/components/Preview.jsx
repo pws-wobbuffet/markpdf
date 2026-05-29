@@ -10,7 +10,7 @@ export default function Preview({ content, showOptions, onToggleOptions }) {
   }, [content]);
 
   return (
-    <section className="pane" style={{ borderRight: 'none' }}>
+    <section className="pane preview-pane" style={{ borderRight: 'none' }}>
       <div className="pane-head">
         Preview
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
