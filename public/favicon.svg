@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="4" fill="#0a0a0a"/>
+  <!-- Document shape -->
+  <rect x="7" y="4" width="14" height="18" rx="1" fill="#f3efe6"/>
+  <rect x="21" y="4" width="5" height="5" rx="0" fill="#0a0a0a"/>
+  <path d="M21 4 L26 9 L21 9 Z" fill="#a8a39a"/>
+  <!-- Lines suggesting text -->
+  <line x1="9" y1="12" x2="19" y2="12" stroke="#1aa05a" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="9" y1="15" x2="19" y2="15" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="9" y1="18" x2="16" y2="18" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- PDF label -->
+  <rect x="6" y="23" width="20" height="7" rx="2" fill="#1aa05a"/>
+  <text x="16" y="29" text-anchor="middle" font-family="'Arial Black',sans-serif" font-weight="900" font-size="5.5" fill="#0a0a0a">PDF</text>
+</svg>
