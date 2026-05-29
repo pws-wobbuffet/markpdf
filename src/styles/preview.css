@@ -92,7 +92,14 @@ html[data-theme="dark"] .sheet.shadowed { box-shadow: 0 16px 40px -16px rgba(0,0
     display: block !important; height: auto !important; overflow: visible !important;
   }
   .pane, .po-pane { display: none !important; }
-  .preview-pane { display: block !important; border: none !important; }
+  /* Override any height the mobile @media screen rule may have set */
+  .preview-pane {
+    display: block !important;
+    border: none !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
   .preview-wrap {
     display: block !important;
     padding: 0 !important;

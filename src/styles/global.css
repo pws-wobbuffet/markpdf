@@ -341,8 +341,8 @@ html[data-theme="dark"] .po-seg button.active { background: var(--line-strong); 
   border-color: color-mix(in oklab, var(--accent) 35%, transparent);
 }
 
-/* ── Mobile ── */
-@media (max-width: 900px) {
+/* ── Mobile (screen only — must not affect @media print) ── */
+@media screen and (max-width: 900px) {
   /* Page scrolls vertically; panes stack */
   body { overflow: auto; height: auto; }
   .app { height: auto; min-height: 100dvh; display: flex; flex-direction: column; }
