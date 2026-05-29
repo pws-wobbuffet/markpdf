@@ -153,19 +153,9 @@ export default function App() {
         onDownloadPDF={downloadPDF}
         theme={theme}
         onThemeToggle={() => setTheme(t => t === 'dark' ? 'light' : 'dark')}
-        showPrintOptions={showPrintOptions}
-        onTogglePrintOptions={() => setShowPrintOptions(v => !v)}
       />
 
-      {showPrintOptions && (
-        <PrintOptionsPanel
-          options={printOptions}
-          onChange={setPrintOptions}
-          onClose={() => setShowPrintOptions(false)}
-        />
-      )}
-
-      <div className="main-area">
+      <div className={`main-area${showPrintOptions ? ' with-options' : ''}`}>
         <Sidebar
           docs={docs}
           activeId={activeId}
@@ -184,7 +174,19 @@ export default function App() {
           </div>
         </section>
 
-        <Preview content={activeDoc?.content ?? ''} />
+        <Preview
+          content={activeDoc?.content ?? ''}
+          showOptions={showPrintOptions}
+          onToggleOptions={() => setShowPrintOptions(v => !v)}
+        />
+
+        {showPrintOptions && (
+          <PrintOptionsPanel
+            options={printOptions}
+            onChange={setPrintOptions}
+            onClose={() => setShowPrintOptions(false)}
+          />
+        )}
       </div>
     </div>
   );

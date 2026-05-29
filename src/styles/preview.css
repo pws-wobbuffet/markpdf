@@ -19,22 +19,20 @@
 .sheet.shadowed { border: 1px solid var(--line); box-shadow: 0 12px 32px -12px rgba(0,0,0,0.18); }
 html[data-theme="dark"] .sheet.shadowed { box-shadow: 0 16px 40px -16px rgba(0,0,0,0.5); }
 
-/* Headings use Space Grotesk */
+/* Headings inherit font-family from .sheet so the PDF options font picker
+   affects all text uniformly. Size, weight, and spacing still apply. */
 .sheet h1 {
-  font-family: "Space Grotesk", system-ui, sans-serif;
   font-weight: 700; font-size: 32px; letter-spacing: -0.025em; line-height: 1.1;
   margin: 0 0 16px; color: var(--fg);
 }
 .sheet h2 {
-  font-family: "Space Grotesk", system-ui, sans-serif;
   font-weight: 600; font-size: 21px; letter-spacing: -0.015em;
   margin: 32px 0 12px; color: var(--fg);
 }
 .sheet h3 {
-  font-family: "Space Grotesk", system-ui, sans-serif;
   font-weight: 600; font-size: 17px; margin: 24px 0 10px; color: var(--fg);
 }
-.sheet h4 { font-family: "Space Grotesk", sans-serif; font-weight: 600; font-size: 15px; margin: 20px 0 8px; }
+.sheet h4 { font-weight: 600; font-size: 15px; margin: 20px 0 8px; }
 
 .sheet p { margin: 0 0 15px; }
 .sheet a { color: var(--accent); text-decoration: underline; }

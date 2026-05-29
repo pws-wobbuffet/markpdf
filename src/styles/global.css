@@ -275,37 +275,21 @@ html[data-theme="dark"] .doc-item:not(.active):hover { background: var(--line); 
   min-height: 100%;
 }
 
-/* ── PDF options panel ── */
-.po-panel {
-  position: fixed;
-  top: calc(var(--toolbar-h) + 8px);
-  right: 16px;
-  width: 248px;
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  box-shadow: 0 8px 24px -8px rgba(0,0,0,0.16);
-  z-index: 100;
-  font-family: "Space Grotesk", sans-serif;
-  overflow: hidden;
+/* ── 4th-column options sidebar ── */
+.main-area.with-options {
+  grid-template-columns: var(--sidebar-w) minmax(0,1fr) minmax(0,1fr) 240px;
 }
-html[data-theme="dark"] .po-panel { box-shadow: 0 8px 24px -8px rgba(0,0,0,0.5); }
 
-.po-head {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 11px 14px;
-  border-bottom: 1px solid var(--line);
-  font-family: "JetBrains Mono", monospace;
-  font-size: 10.5px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--fg-soft);
-}
+/* The options pane is a normal .pane — no extra positioning needed */
+.po-pane { background: var(--paper-2); }
+
 .po-close {
-  appearance: none; background: none; border: none; padding: 3px; cursor: pointer;
+  appearance: none; background: none; border: none; padding: 3px 4px; cursor: pointer;
   color: var(--fg-faint); border-radius: 4px; line-height: 0;
 }
-.po-close:hover { background: var(--paper-2); color: var(--fg); }
+.po-close:hover { background: var(--line); color: var(--fg); }
 
-.po-body { padding: 14px 14px 4px; display: flex; flex-direction: column; gap: 14px; }
+.po-body { padding: 16px 14px 8px; display: flex; flex-direction: column; gap: 16px; }
 
 .po-group { display: flex; flex-direction: column; gap: 7px; }
 .po-label {
@@ -316,13 +300,14 @@ html[data-theme="dark"] .po-panel { box-shadow: 0 8px 24px -8px rgba(0,0,0,0.5);
 
 .po-seg {
   display: flex;
-  background: var(--paper-2);
+  background: var(--paper);
   border: 1px solid var(--line);
   border-radius: 7px;
   overflow: hidden;
   padding: 2px;
   gap: 2px;
 }
+html[data-theme="dark"] .po-seg { background: var(--paper-2); }
 .po-seg button {
   flex: 1; appearance: none; background: transparent; color: var(--fg-soft);
   border: none; border-radius: 5px; padding: 6px 4px;
@@ -331,32 +316,36 @@ html[data-theme="dark"] .po-panel { box-shadow: 0 8px 24px -8px rgba(0,0,0,0.5);
   transition: background 100ms ease, color 100ms ease;
 }
 .po-seg button.active {
-  background: var(--paper); color: var(--fg);
+  background: var(--paper-2); color: var(--fg);
   box-shadow: 0 1px 2px rgba(0,0,0,0.06);
 }
 html[data-theme="dark"] .po-seg button.active { background: var(--line-strong); }
 
-.po-footer {
-  padding: 10px 14px 12px;
-  margin-top: 4px;
-}
 .po-hint {
   font-family: "JetBrains Mono", monospace;
   font-size: 10px; color: var(--fg-faint); letter-spacing: 0.02em;
+  line-height: 1.5;
+  margin: 4px 0 0;
 }
 
-/* Active state for the settings icon button */
-.icon-btn-active {
-  background: var(--accent-soft) !important;
-  color: var(--accent) !important;
-  border-color: color-mix(in oklab, var(--accent) 30%, transparent) !important;
+/* Toggle button inside the Preview pane header */
+.po-toggle-btn {
+  appearance: none; background: none; border: 1px solid transparent;
+  padding: 4px 5px; cursor: pointer; border-radius: 5px; line-height: 0;
+  color: var(--fg-faint);
+  transition: background 100ms ease, color 100ms ease, border-color 100ms ease;
+}
+.po-toggle-btn:hover { background: var(--paper-2); color: var(--fg); border-color: var(--line); }
+.po-toggle-btn.active {
+  background: var(--accent-soft); color: var(--accent);
+  border-color: color-mix(in oklab, var(--accent) 35%, transparent);
 }
 
 /* ── Mobile ── */
 @media (max-width: 900px) {
   .main-area { grid-template-columns: 1fr; grid-template-rows: auto auto auto; overflow: auto; }
+  .main-area.with-options { grid-template-columns: 1fr; grid-template-rows: auto auto auto auto; }
   .pane { border-right: none; border-bottom: 1px solid var(--line); }
   body { overflow: auto; height: auto; }
   .app { height: auto; }
-  .po-panel { right: 8px; width: calc(100vw - 16px); }
 }
