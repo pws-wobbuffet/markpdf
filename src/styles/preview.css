@@ -93,7 +93,13 @@ html[data-theme="dark"] .sheet.shadowed { box-shadow: 0 16px 40px -16px rgba(0,0
   }
   .pane, .po-pane { display: none !important; }
   .preview-pane { display: block !important; border: none !important; }
-  .preview-wrap { display: block !important; padding: 0 !important; background: #fff !important; }
+  .preview-wrap {
+    display: block !important;
+    padding: 0 !important;
+    background: transparent !important;
+    min-height: 0 !important;   /* kills the 100vh ghost block after content */
+    height: auto !important;
+  }
 
   /* 3. Force light-mode design tokens so dark-mode users get readable output.
      Without this, html[data-theme="dark"] would apply and print dark-on-dark. */
