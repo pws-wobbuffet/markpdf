@@ -368,6 +368,48 @@ html[data-theme="dark"] .po-seg button.active { background: var(--line-strong); 
 .po-select:focus { border-color: var(--accent); }
 html[data-theme="dark"] .po-select { background-color: var(--paper-2); }
 
+.po-input {
+  width: 100%;
+  appearance: none;
+  background: var(--paper);
+  color: var(--fg);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 7px 10px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  outline: none;
+  transition: border-color 100ms ease;
+}
+html[data-theme="dark"] .po-input { background: var(--paper-2); }
+.po-input:focus { border-color: var(--accent); }
+.po-input::placeholder { color: var(--fg-faint); }
+
+.po-custom-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.po-custom-row .po-input { flex: 1; min-width: 0; }
+
+.po-clear-btn {
+  appearance: none; background: none; border: 1px solid var(--line);
+  border-radius: 5px; padding: 5px 6px; cursor: pointer;
+  color: var(--fg-faint); line-height: 0; flex-shrink: 0;
+  transition: background 100ms ease, color 100ms ease;
+}
+.po-clear-btn:hover { background: var(--paper-2); color: var(--fg); }
+
+.po-custom-status {
+  display: block;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  color: var(--fg-faint);
+  letter-spacing: 0.02em;
+  margin-top: 5px;
+}
+.po-custom-status.ok { color: var(--accent); }
+
 .po-hint {
   font-family: "JetBrains Mono", monospace;
   font-size: 10px; color: var(--fg-faint); letter-spacing: 0.02em;

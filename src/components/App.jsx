@@ -92,10 +92,25 @@ export default function App() {
     localStorage.setItem('markpdf.options-open', String(next));
   };
 
+  // Inject / remove the custom Google Font <link> when the URL changes
+  useEffect(() => {
+    document.getElementById('markpdf-custom-font')?.remove();
+    if (printOptions.customFontUrl) {
+      const link = document.createElement('link');
+      link.id = 'markpdf-custom-font';
+      link.rel = 'stylesheet';
+      link.href = printOptions.customFontUrl;
+      document.head.appendChild(link);
+    }
+  }, [printOptions.customFontUrl]);
+
   // Apply options to CSS vars so the preview and print both use them
   useEffect(() => {
     const r = document.documentElement;
-    r.style.setProperty('--sheet-body-font',   FONTS[printOptions.font]?.value    ?? FONTS.newsreader.value);
+    const bodyFont = printOptions.font === 'custom' && printOptions.customFontName
+      ? `"${printOptions.customFontName}", sans-serif`
+      : FONTS[printOptions.font]?.value ?? FONTS.newsreader.value;
+    r.style.setProperty('--sheet-body-font',   bodyFont);
     r.style.setProperty('--sheet-font-size',   SIZES[printOptions.size]?.value    ?? SIZES.md.value);
     r.style.setProperty('--sheet-line-height', SPACINGS[printOptions.spacing]?.value ?? SPACINGS.regular.value);
     localStorage.setItem('markpdf.print', JSON.stringify(printOptions));
