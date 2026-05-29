@@ -1,39 +1,34 @@
-/* ── Prose styles for the markdown preview ── */
+/* ── Prose styles for the markdown preview ──
+   The preview pane is always white regardless of app theme,
+   because it represents the document as it will print.       */
 .prose {
   max-width: 740px;
   margin: 0 auto;
   padding: 32px 40px 80px;
-  font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+  font-family: Georgia, "Times New Roman", serif;
   font-size: 16px;
   line-height: 1.7;
   color: #24292f;
 }
 
-html[data-theme="dark"] .prose { color: #e6edf3; }
-
 .prose h1, .prose h2, .prose h3,
 .prose h4, .prose h5, .prose h6 {
+  font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
   margin-top: 1.5em;
   margin-bottom: 0.5em;
   font-weight: 700;
   line-height: 1.25;
   color: #1f2328;
 }
-html[data-theme="dark"] .prose h1,
-html[data-theme="dark"] .prose h2,
-html[data-theme="dark"] .prose h3 { color: #f0f6fc; }
 
-.prose h1 { font-size: 2em; padding-bottom: 0.3em; border-bottom: 1px solid #d1d9e0; }
+.prose h1 { font-size: 2em;   padding-bottom: 0.3em; border-bottom: 1px solid #d1d9e0; }
 .prose h2 { font-size: 1.5em; padding-bottom: 0.3em; border-bottom: 1px solid #d1d9e0; }
 .prose h3 { font-size: 1.25em; }
 .prose h4 { font-size: 1em; }
-html[data-theme="dark"] .prose h1,
-html[data-theme="dark"] .prose h2 { border-bottom-color: #30363d; }
 
 .prose p { margin: 0 0 1em; }
 
 .prose a { color: #0969da; text-decoration: underline; }
-html[data-theme="dark"] .prose a { color: #58a6ff; }
 
 .prose strong { font-weight: 700; }
 .prose em { font-style: italic; }
@@ -48,32 +43,32 @@ html[data-theme="dark"] .prose a { color: #58a6ff; }
   border-left: 4px solid #d1d9e0;
   color: #57606a;
 }
-html[data-theme="dark"] .prose blockquote { border-left-color: #3d444d; color: #9198a1; }
 
 .prose code {
   font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
-  font-size: 85%;
+  font-size: 87%;
   background: rgba(175, 184, 193, 0.2);
-  padding: 0.2em 0.4em;
-  border-radius: 6px;
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
 }
-html[data-theme="dark"] .prose code { background: rgba(110, 118, 129, 0.4); }
 
 .prose pre {
+  font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
   background: #f6f8fa;
   border: 1px solid #d1d9e0;
   border-radius: 6px;
   padding: 16px;
   overflow-x: auto;
   margin: 0 0 1em;
-  line-height: 1.45;
+  font-size: 87%;
+  line-height: 1.5;
+  white-space: pre;         /* normal screen view: horizontal scroll */
 }
-html[data-theme="dark"] .prose pre { background: #161b22; border-color: #30363d; }
 
 .prose pre code {
   background: transparent;
   padding: 0;
-  font-size: 85%;
+  font-size: inherit;
   color: inherit;
   border-radius: 0;
 }
@@ -83,24 +78,38 @@ html[data-theme="dark"] .prose pre { background: #161b22; border-color: #30363d;
   border-top: 2px solid #d1d9e0;
   margin: 1.5em 0;
 }
-html[data-theme="dark"] .prose hr { border-top-color: #30363d; }
 
-.prose table { border-collapse: collapse; margin: 0 0 1em; width: 100%; overflow: auto; display: block; }
+.prose table {
+  border-collapse: collapse;
+  margin: 0 0 1em;
+  width: 100%;
+  display: table;           /* proper table layout, not block */
+  font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+  font-size: 14px;
+}
 .prose th, .prose td { border: 1px solid #d1d9e0; padding: 8px 14px; text-align: left; }
 .prose th { background: #f6f8fa; font-weight: 600; }
-html[data-theme="dark"] .prose th { background: #161b22; }
-html[data-theme="dark"] .prose th, html[data-theme="dark"] .prose td { border-color: #30363d; }
-.prose tr:nth-child(even) td { background: #f6f8fa; }
-html[data-theme="dark"] .prose tr:nth-child(even) td { background: #161b22; }
+.prose tr:nth-child(even) td { background: #fafafa; }
 
 .prose img { max-width: 100%; border-radius: 6px; }
 
 /* ── Print styles ── */
 @media print {
+  /* Hide all app chrome; only the preview content prints */
   .toolbar, .sidebar, .editor-pane, .divider,
   .mobile-tabs, .pane-label { display: none !important; }
 
-  .app, .main-area, .pane-area { display: block !important; height: auto !important; overflow: visible !important; }
+  html, body {
+    overflow: visible !important;
+    height: auto !important;
+    background: #fff !important;
+  }
+
+  .app, .main-area, .pane-area {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
 
   .preview-pane {
     display: block !important;
@@ -112,15 +121,57 @@ html[data-theme="dark"] .prose tr:nth-child(even) td { background: #161b22; }
   }
 
   .prose {
-    max-width: none;
-    padding: 0;
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: 11pt;
+    line-height: 1.6;
     color: #000 !important;
   }
 
-  .prose h1, .prose h2, .prose h3 { color: #000 !important; }
-  .prose a { color: #000 !important; }
-  .prose pre, .prose code { background: #f6f8fa !important; border-color: #ccc !important; }
-  .prose blockquote { border-left-color: #ccc !important; color: #555 !important; }
+  .prose h1 { font-size: 22pt; }
+  .prose h2 { font-size: 17pt; }
+  .prose h3 { font-size: 13pt; }
+  .prose h4 { font-size: 11pt; }
+  .prose h1, .prose h2, .prose h3, .prose h4 { color: #000 !important; }
 
-  @page { margin: 20mm; size: A4; }
+  .prose a { color: #000 !important; text-decoration: underline; }
+
+  .prose pre {
+    white-space: pre-wrap !important;       /* wrap long lines in print */
+    word-break: break-all !important;
+    overflow: visible !important;
+    background: #f6f8fa !important;
+    border: 1px solid #ccc !important;
+    border-radius: 0 !important;
+    font-size: 9pt !important;
+    line-height: 1.4 !important;
+    page-break-inside: avoid;
+  }
+
+  .prose code {
+    font-size: 9pt !important;
+    background: rgba(0,0,0,0.06) !important;
+  }
+
+  .prose pre code {
+    background: transparent !important;
+    font-size: inherit !important;
+  }
+
+  .prose blockquote {
+    border-left-color: #999 !important;
+    color: #444 !important;
+    page-break-inside: avoid;
+  }
+
+  .prose table { font-size: 10pt; page-break-inside: avoid; }
+  .prose th, .prose td { border-color: #ccc !important; }
+  .prose th { background: #f0f0f0 !important; }
+
+  .prose img { page-break-inside: avoid; }
+
+  .prose h2, .prose h3 { page-break-after: avoid; }
+
+  @page { margin: 20mm; size: A4 portrait; }
 }
