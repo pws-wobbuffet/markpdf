@@ -4,7 +4,7 @@ import Sidebar from './Sidebar';
 import Editor from './Editor';
 import Preview from './Preview';
 import PrintOptionsPanel, {
-  DEFAULT_PRINT_OPTIONS, FONTS, SIZES, SPACINGS, MARGINS,
+  DEFAULT_PRINT_OPTIONS, FONTS, SIZES, SPACINGS, MARGINS, PAGE_SIZES,
 } from './PrintOptionsPanel';
 
 const STORE_KEY = 'markpdf.docs';
@@ -71,15 +71,31 @@ export default function App() {
 
   // Print options
   const [printOptions, setPrintOptions] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('markpdf.print') || 'null') || DEFAULT_PRINT_OPTIONS; }
-    catch { return DEFAULT_PRINT_OPTIONS; }
+    try {
+      const raw = JSON.parse(localStorage.getItem('markpdf.print') || 'null');
+      if (!raw) return DEFAULT_PRINT_OPTIONS;
+      // Migrate old single-word font keys to new keys
+      const fontMigration = { serif: 'newsreader', sans: 'spacegrotesk', mono: 'jetbrainsmono' };
+      if (raw.font && fontMigration[raw.font]) raw.font = fontMigration[raw.font];
+      return { ...DEFAULT_PRINT_OPTIONS, ...raw };
+    } catch { return DEFAULT_PRINT_OPTIONS; }
   });
-  const [showPrintOptions, setShowPrintOptions] = useState(false);
+
+  // Sidebar open by default; persisted
+  const [showPrintOptions, setShowPrintOptions] = useState(() => {
+    const s = localStorage.getItem('markpdf.options-open');
+    return s === null ? true : s === 'true';
+  });
+  const togglePrintOptions = () => {
+    const next = !showPrintOptions;
+    setShowPrintOptions(next);
+    localStorage.setItem('markpdf.options-open', String(next));
+  };
 
   // Apply options to CSS vars so the preview and print both use them
   useEffect(() => {
     const r = document.documentElement;
-    r.style.setProperty('--sheet-body-font',   FONTS[printOptions.font]?.value    ?? FONTS.serif.value);
+    r.style.setProperty('--sheet-body-font',   FONTS[printOptions.font]?.value    ?? FONTS.newsreader.value);
     r.style.setProperty('--sheet-font-size',   SIZES[printOptions.size]?.value    ?? SIZES.md.value);
     r.style.setProperty('--sheet-line-height', SPACINGS[printOptions.spacing]?.value ?? SPACINGS.regular.value);
     localStorage.setItem('markpdf.print', JSON.stringify(printOptions));
@@ -124,23 +140,30 @@ export default function App() {
   };
 
   const downloadPDF = () => {
-    // Inject @page margin dynamically — CSS variables can't reach @page rules
-    const marginMm = MARGINS[printOptions.margins]?.value ?? '20';
+    const marginMm = MARGINS[printOptions.margins]?.value   ?? '20';
+    const pageSize  = PAGE_SIZES[printOptions.pageSize]?.value ?? 'A4 portrait';
+
+    // Remove any leftover override from a previous call
+    document.getElementById('markpdf-page-override')?.remove();
     const pageStyle = document.createElement('style');
     pageStyle.id = 'markpdf-page-override';
-    pageStyle.textContent = `@media print { @page { margin: ${marginMm}mm !important; } }`;
+    // Note: !important is invalid inside @page — rely on cascade order instead
+    pageStyle.textContent = `@media print { @page { margin: ${marginMm}mm; size: ${pageSize}; } }`;
     document.head.appendChild(pageStyle);
 
     const prev = document.title;
     document.title = activeDoc?.title || 'document';
-    window.print();
 
-    const cleanup = () => {
-      document.title = prev;
-      pageStyle.remove();
-      window.removeEventListener('focus', cleanup);
-    };
-    window.addEventListener('focus', cleanup);
+    // Small delay to let the browser process the injected style before rendering
+    setTimeout(() => {
+      window.print();
+      const cleanup = () => {
+        document.title = prev;
+        pageStyle.remove();
+        window.removeEventListener('focus', cleanup);
+      };
+      window.addEventListener('focus', cleanup);
+    }, 50);
   };
 
   const lineCount = (activeDoc?.content ?? '').split('\n').length;
@@ -177,14 +200,14 @@ export default function App() {
         <Preview
           content={activeDoc?.content ?? ''}
           showOptions={showPrintOptions}
-          onToggleOptions={() => setShowPrintOptions(v => !v)}
+          onToggleOptions={togglePrintOptions}
         />
 
         {showPrintOptions && (
           <PrintOptionsPanel
             options={printOptions}
             onChange={setPrintOptions}
-            onClose={() => setShowPrintOptions(false)}
+            onClose={togglePrintOptions}
           />
         )}
       </div>
