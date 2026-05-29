@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 320" width="1280" height="320" role="img" aria-label="markpdf — Markdown to PDF, privately">
+  <rect width="1280" height="320" fill="#0e1116"/>
+
+  <!-- Thin accent rule at top (brighter green in dark mode) -->
+  <rect x="0" y="0" width="1280" height="4" fill="#3ddc84"/>
+
+  <!-- Wordmark: mark (light) + pdf (bright accent) -->
+  <text x="640" y="172" text-anchor="middle"
+        font-family="'Space Grotesk',system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif"
+        font-weight="700" font-size="96" letter-spacing="-3" fill="#e8e6e1">mark<tspan fill="#3ddc84">pdf</tspan></text>
+
+  <!-- Mono tagline -->
+  <text x="640" y="224" text-anchor="middle"
+        font-family="ui-monospace,'JetBrains Mono',Menlo,Consolas,monospace"
+        font-size="17" letter-spacing="4" fill="#969ba3">WRITE  MARKDOWN  ·  EXPORT  PDF  ·  NOTHING  LEAVES  YOUR  BROWSER</text>
+</svg>
