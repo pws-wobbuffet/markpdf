@@ -343,9 +343,37 @@ html[data-theme="dark"] .po-seg button.active { background: var(--line-strong); 
 
 /* ── Mobile ── */
 @media (max-width: 900px) {
-  .main-area { grid-template-columns: 1fr; grid-template-rows: auto auto auto; overflow: auto; }
-  .main-area.with-options { grid-template-columns: 1fr; grid-template-rows: auto auto auto auto; }
-  .pane { border-right: none; border-bottom: 1px solid var(--line); }
+  /* Page scrolls vertically; panes stack */
   body { overflow: auto; height: auto; }
-  .app { height: auto; }
+  .app { height: auto; min-height: 100dvh; display: flex; flex-direction: column; }
+
+  .main-area,
+  .main-area.with-options { grid-template-columns: 1fr; overflow: visible; }
+
+  .pane {
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* Sidebar: compact, auto-height, scrollable list */
+  .pane.docs { height: auto; overflow: hidden; }
+  .pane.docs .pane-body { max-height: 180px; overflow-y: auto; }
+
+  /* Editor + preview: fixed 50dvh so CodeMirror gets a definite height */
+  .pane:not(.docs):not(.po-pane) {
+    height: 50dvh;
+    min-height: 320px;
+    overflow: hidden; /* pane-body handles inner scroll */
+  }
+
+  /* Options pane when open: natural height below the preview */
+  .po-pane { height: auto; }
+
+  /* Compact toolbar: hide non-essential items, icon-only download */
+  .toolbar { padding: 0 14px; gap: 8px; }
+  .badge, .divider-v { display: none; }
+  .btn-text { display: none; }           /* hide "Download PDF" label */
+  .btn-primary { padding: 9px 11px; }   /* icon-only pill */
+  .doc-title-btn { min-width: 0; max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .doc-title-input { min-width: 0; width: 140px; }
 }
