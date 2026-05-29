@@ -87,7 +87,7 @@ html[data-theme="dark"] .sheet.shadowed { box-shadow: 0 16px 40px -16px rgba(0,0
   .toolbar, .pane.docs, .pane-head { display: none !important; }
 
   /* 2. Reset layout so only the preview pane renders */
-  html, body { height: auto !important; overflow: visible !important; }
+  html, body { height: auto !important; overflow: visible !important; background: #ffffff !important; }
   .app, .main-area, .pane-body {
     display: block !important; height: auto !important; overflow: visible !important;
   }
