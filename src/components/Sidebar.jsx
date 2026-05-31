@@ -73,7 +73,7 @@ export default function Sidebar({ docs, activeId, onSelect, onNew, onDelete }) {
           ))}
         </div>
       </div>
-      {/* Surface 5 — donation footer */}
+      {/* Donation footer */}
       <div className="side-footer">
         <div className="donate-2">
           <span className="donate-lbl">

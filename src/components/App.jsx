@@ -183,32 +183,28 @@ export default function App() {
     if (activeId === id) { setActiveId(next[0].id); localStorage.setItem(ACTIVE_KEY, next[0].id); }
   };
 
-  const downloadPDF = () => {
-    const marginMm = MARGINS[printOptions.margins]?.value   ?? '20';
-    const pageSize  = 'A4 portrait'; // always A4; page size option removed
+  const downloadPDF = useCallback(async () => {
+    const sheet = document.querySelector('.sheet');
+    if (!sheet) return;
 
-    // Remove any leftover override from a previous call
-    document.getElementById('markpdf-page-override')?.remove();
-    const pageStyle = document.createElement('style');
-    pageStyle.id = 'markpdf-page-override';
-    // Note: !important is invalid inside @page — rely on cascade order instead
-    pageStyle.textContent = `@media print { @page { margin: ${marginMm}mm; size: ${pageSize}; } }`;
-    document.head.appendChild(pageStyle);
+    const marginMm = Number(MARGINS[printOptions.margins]?.value ?? '20');
 
-    const prev = document.title;
-    document.title = activeDoc?.title || 'document';
+    const prevZoom = sheet.style.zoom;
+    sheet.style.zoom = '1';
 
-    // Small delay to let the browser process the injected style before rendering
-    setTimeout(() => {
-      window.print();
-      const cleanup = () => {
-        document.title = prev;
-        pageStyle.remove();
-        window.removeEventListener('focus', cleanup);
-      };
-      window.addEventListener('focus', cleanup);
-    }, 50);
-  };
+    try {
+      const { default: html2pdf } = await import('html2pdf.js');
+      await html2pdf().set({
+        margin:      marginMm,
+        filename:    `${activeDoc?.title || 'document'}.pdf`,
+        image:       { type: 'png' },
+        html2canvas: { scale: 2, useCORS: true, logging: false },
+        jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      }).from(sheet).save();
+    } finally {
+      sheet.style.zoom = prevZoom;
+    }
+  }, [printOptions, activeDoc]);
 
   const lineCount = (activeDoc?.content ?? '').split('\n').length;
 

@@ -105,31 +105,6 @@ export default function PrintOptionsPanel({ options, onChange, onClose }) {
           </select>
         </div>
 
-        <div className="po-group">
-          <span className="po-label">Custom Google Font</span>
-          <div className="po-custom-row">
-            <input
-              className="po-input"
-              type="text"
-              placeholder={`Font name or Google Fonts URL`}
-              value={inputVal}
-              onChange={(e) => setInputVal(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && applyCustomFont()}
-              onBlur={applyCustomFont}
-            />
-            {options.customFontName && (
-              <button className="po-clear-btn" onClick={clearCustomFont} title="Remove">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                  <path d="M6 6l12 12M18 6L6 18"/>
-                </svg>
-              </button>
-            )}
-          </div>
-          {options.customFontName
-            ? <span className="po-custom-status ok">✓ {options.customFontName}</span>
-            : <span className="po-custom-status">e.g. Playfair Display · or paste a URL</span>
-          }
-        </div>
 
         <div className="po-group">
           <span className="po-label">Font size</span>
@@ -144,45 +119,6 @@ export default function PrintOptionsPanel({ options, onChange, onClose }) {
           <Seg options={MARGINS}    value={options.margins}  onChange={set('margins')} />
         </div>
         <p className="po-hint">Changes apply to the preview and the downloaded PDF.</p>
-
-        {/* Surface 6 — locked Pro features section */}
-        <div className="pro-section">
-          <span className="pro-sec-label">Pro features</span>
-          {[
-            'Cloud sync',
-            'Export DOCX / HTML',
-            'Custom CSS themes',
-            'Document templates',
-          ].map((feat) => (
-            <a
-              key={feat}
-              className="pro-row"
-              href="https://markpdf-pro.pages.dev"
-              target="_blank"
-              rel="noopener"
-            >
-              <span className="pro-badge">Pro</span>
-              <span>{feat}</span>
-              <span className="pro-lock">
-                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.2">
-                  <rect x="3.5" y="7" width="9" height="6" rx="1.2"/>
-                  <path d="M5.5 7V5.2a2.5 2.5 0 0 1 5 0V7"/>
-                </svg>
-              </span>
-            </a>
-          ))}
-          <a
-            className="pro-cta"
-            href="https://markpdf-pro.pages.dev"
-            target="_blank"
-            rel="noopener"
-          >
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
-              <path d="M9 3h4v4"/><path d="M13 3l-6 6"/><path d="M11 9v3.5H3.5V5H7"/>
-            </svg>
-            Get markpdf pro
-          </a>
-        </div>
       </div>
     </aside>
   );
