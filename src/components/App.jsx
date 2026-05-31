@@ -184,26 +184,23 @@ export default function App() {
   };
 
   const downloadPDF = useCallback(async () => {
-    const sheet = document.querySelector('.sheet');
-    if (!sheet) return;
+    const [{ pdf }, { default: MarkdownPDF }] = await Promise.all([
+      import('@react-pdf/renderer'),
+      import('./PDFDocument'),
+    ]);
 
-    const marginMm = Number(MARGINS[printOptions.margins]?.value ?? '20');
+    const blob = await pdf(
+      <MarkdownPDF content={activeDoc?.content ?? ''} printOptions={printOptions} />
+    ).toBlob();
 
-    const prevZoom = sheet.style.zoom;
-    sheet.style.zoom = '1';
-
-    try {
-      const { default: html2pdf } = await import('html2pdf.js');
-      await html2pdf().set({
-        margin:      marginMm,
-        filename:    `${activeDoc?.title || 'document'}.pdf`,
-        image:       { type: 'png' },
-        html2canvas: { scale: 2, useCORS: true, logging: false },
-        jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' },
-      }).from(sheet).save();
-    } finally {
-      sheet.style.zoom = prevZoom;
-    }
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${activeDoc?.title || 'document'}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   }, [printOptions, activeDoc]);
 
   const lineCount = (activeDoc?.content ?? '').split('\n').length;

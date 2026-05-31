@@ -14,9 +14,9 @@
     "@codemirror/state": "^6",
     "@codemirror/theme-one-dark": "^6",
     "@codemirror/view": "^6",
+    "@react-pdf/renderer": "^4.5.1",
     "codemirror": "^6",
     "dompurify": "^3.4.7",
-    "html2pdf.js": "^0.14.0",
     "marked": "^12"
   },
   "devDependencies": {
