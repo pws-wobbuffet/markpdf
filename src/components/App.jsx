@@ -183,22 +183,18 @@ export default function App() {
     if (activeId === id) { setActiveId(next[0].id); localStorage.setItem(ACTIVE_KEY, next[0].id); }
   };
 
-  const downloadPDF = () => {
-    const marginMm = MARGINS[printOptions.margins]?.value   ?? '20';
-    const pageSize  = 'A4 portrait'; // always A4; page size option removed
+  const downloadPDF = useCallback(() => {
+    const marginMm = MARGINS[printOptions.margins]?.value ?? '20';
 
-    // Remove any leftover override from a previous call
     document.getElementById('markpdf-page-override')?.remove();
     const pageStyle = document.createElement('style');
     pageStyle.id = 'markpdf-page-override';
-    // Note: !important is invalid inside @page — rely on cascade order instead
-    pageStyle.textContent = `@media print { @page { margin: ${marginMm}mm; size: ${pageSize}; } }`;
+    pageStyle.textContent = `@media print { @page { margin: ${marginMm}mm; size: A4 portrait; } }`;
     document.head.appendChild(pageStyle);
 
     const prev = document.title;
     document.title = activeDoc?.title || 'document';
 
-    // Small delay to let the browser process the injected style before rendering
     setTimeout(() => {
       window.print();
       const cleanup = () => {
@@ -208,7 +204,7 @@ export default function App() {
       };
       window.addEventListener('focus', cleanup);
     }, 50);
-  };
+  }, [printOptions, activeDoc]);
 
   const lineCount = (activeDoc?.content ?? '').split('\n').length;
 

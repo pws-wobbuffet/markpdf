@@ -1,5 +1,6 @@
 import React, { useMemo, useRef, useEffect } from 'react';
 import { marked } from 'marked';
+import DOMPurify from 'dompurify';
 
 marked.setOptions({ gfm: true, breaks: false });
 
@@ -8,8 +9,10 @@ export default function Preview({
   zoom = 1, onZoomIn, onZoomOut, onZoomReset, onSetZoom,
 }) {
   const html = useMemo(() => {
-    try { return marked.parse(content || ''); }
-    catch { return '<p>Parse error</p>'; }
+    try {
+      const raw = marked.parse(content || '');
+      return DOMPurify.sanitize(raw);
+    } catch { return '<p>Parse error</p>'; }
   }, [content]);
 
   const paneBodyRef   = useRef(null);

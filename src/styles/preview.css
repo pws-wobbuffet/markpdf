@@ -83,33 +83,45 @@ html[data-theme="dark"] .sheet.shadowed { box-shadow: 0 16px 40px -16px rgba(0,0
 
 /* ── Print styles ── */
 @media print {
-  /* 1. Hide app chrome */
-  .toolbar, .pane.docs, .pane-head { display: none !important; }
 
-  /* 2. Reset layout so only the preview pane renders */
-  html, body { height: auto !important; overflow: visible !important; background: #ffffff !important; }
-  .app, .main-area, .pane-body {
-    display: block !important; height: auto !important; overflow: visible !important;
+  /* 1. Hide all editor chrome */
+  .toolbar, .pane.docs, .pane-head, .pane-divider,
+  .pane, .po-pane, .side-footer, .side-pro,
+  .zoom-controls { display: none !important; }
+
+  /* 2. Flatten the app shell to a simple block flow */
+  html, body {
+    height: auto !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
-  .pane, .po-pane { display: none !important; }
-  /* Override any height the mobile @media screen rule may have set */
+  .app, .main-area, .ep-wrap, .pane-body {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+    width: 100% !important;
+  }
   .preview-pane {
     display: block !important;
     border: none !important;
     height: auto !important;
     min-height: 0 !important;
     overflow: visible !important;
+    background: transparent !important;
   }
   .preview-wrap {
     display: block !important;
     padding: 0 !important;
     background: transparent !important;
-    min-height: 0 !important;   /* kills the 100vh ghost block after content */
+    min-height: 0 !important;
     height: auto !important;
+    width: 100% !important;
+    justify-content: unset !important;
   }
 
-  /* 3. Force light-mode design tokens so dark-mode users get readable output.
-     Without this, html[data-theme="dark"] would apply and print dark-on-dark. */
+  /* 3. Force light-mode tokens */
   :root {
     --bg:          #f6f4ef !important;
     --fg:          #1a1916 !important;
@@ -128,31 +140,41 @@ html[data-theme="dark"] .sheet.shadowed { box-shadow: 0 16px 40px -16px rgba(0,0
     --syn-str:     #b45309 !important;
   }
 
-  /* 4. Sheet: remove decorative chrome only.
-     font-family, font-size, line-height, color, list markers, blockquote,
-     code backgrounds — all inherited from .sheet above, nothing overridden. */
+  /* 4. Sheet reset */
   .sheet {
-    width: 100%      !important;  /* fill the full print page */
-    flex-shrink: 1   !important;  /* allow shrinking in print context */
-    zoom: 1          !important;  /* always print at 100%, ignore preview zoom */
-    padding: 0       !important;
-    border: none     !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    flex-shrink: 1 !important;
+    zoom: 1 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
     box-shadow: none !important;
     border-radius: 0 !important;
+    background: #ffffff !important;
+    position: static !important;
   }
 
-  /* 5. Code blocks: wrap long lines (no horizontal scroll in print) */
+  /* 5. Page break control */
+  .sheet h1, .sheet h2, .sheet h3, .sheet h4 {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+  .sheet pre, .sheet blockquote,
+  .sheet table, .sheet figure,
+  .sheet img { page-break-inside: avoid; break-inside: avoid; }
+  .sheet thead { display: table-header-group; }
+  .sheet tr     { page-break-inside: avoid; break-inside: avoid; }
+  .sheet li     { page-break-inside: avoid; break-inside: avoid; }
+  .sheet ul, .sheet ol { page-break-inside: avoid; break-inside: avoid; }
+  .sheet p { orphans: 3; widows: 3; }
+
+  /* 6. Code blocks: wrap long lines */
   .sheet pre {
     white-space: pre-wrap !important;
     word-break: break-all !important;
-    overflow: visible    !important;
-    page-break-inside: avoid;
+    overflow: visible !important;
   }
 
-  /* 6. Prevent awkward page breaks */
-  .sheet h2, .sheet h3, .sheet h4 { page-break-after: avoid; }
-  .sheet blockquote, .sheet table, .sheet img { page-break-inside: avoid; }
-
-  /* @page fully injected dynamically by downloadPDF() — margin + size
-     both come from the user's PDF options. No static @page rule here. */
+  /* @page injected dynamically by downloadPDF() — margin + size from user's PDF options */
 }

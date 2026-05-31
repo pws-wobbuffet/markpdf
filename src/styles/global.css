@@ -19,6 +19,10 @@
   --syn-str: #b45309;
   --syn-punct: #b0aba0;
   --code-bg: #f6f4ef;
+  --shadow:      0 1px 2px rgba(26,25,22,.04), 0 8px 24px rgba(26,25,22,.06);
+  --shadow-soft: 0 1px 3px rgba(26,25,22,.05), 0 6px 18px rgba(26,25,22,.05);
+  --sheet:     #ffffff;
+  --sheet-ink: #23211c;
 }
 
 html[data-theme="dark"] {
@@ -39,6 +43,10 @@ html[data-theme="dark"] {
   --syn-str: #ffb86c;
   --syn-punct: #4b515a;
   --code-bg: #0e1116;
+  --shadow:      0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.4);
+  --shadow-soft: 0 1px 3px rgba(0,0,0,.25), 0 8px 22px rgba(0,0,0,.32);
+  --sheet:     #151a21;
+  --sheet-ink: #e8e6e1;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -70,7 +78,7 @@ body {
   padding: 0 22px;
   height: var(--toolbar-h);
   border-bottom: 1px solid var(--line);
-  background: var(--paper);
+  background: var(--bg);
   flex-shrink: 0;
   z-index: 10;
 }
@@ -86,6 +94,20 @@ body {
   flex-shrink: 0;
 }
 .wordmark .accent { color: var(--accent); }
+
+.oss-badge {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 700;
+  font-size: 9px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  background: var(--accent);
+  color: var(--accent-ink);
+  padding: 2px 6px;
+  border-radius: 4px;
+  line-height: 1.4;
+  flex-shrink: 0;
+}
 
 .divider-v { width: 1px; height: 22px; background: var(--line-strong); flex-shrink: 0; }
 .spacer { flex: 1; }
@@ -531,4 +553,167 @@ html[data-theme="dark"] .po-input { background: var(--paper-2); }
   .btn-primary { padding: 9px 11px; }   /* icon-only pill */
   .doc-title-btn { min-width: 0; max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .doc-title-input { min-width: 0; width: 140px; }
+  .trypro { display: none; }
+}
+
+/* ── Sidebar footer (shared shell) ── */
+.side-footer {
+  flex: 0 0 auto;
+  border-top: 1px solid var(--line);
+  background: var(--paper-2);
+}
+
+/* ── Surface 5 · Donation footer — variant 1: two inline labelled buttons ── */
+.donate-1 {
+  height: 44px; display: flex; align-items: center; gap: 8px; padding: 0 12px;
+}
+.donate-1 a {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 1px solid var(--line); border-radius: 6px;
+  padding: 4px 9px; font-size: 11px; font-weight: 500;
+  color: var(--fg-soft); cursor: pointer; transition: all .15s;
+  text-decoration: none;
+}
+.donate-1 a:hover { border-color: var(--line-strong); background: var(--paper); color: var(--fg); }
+.donate-1 a svg { width: 13px; height: 13px; display: block; }
+
+/* ── Surface 5 · Donation footer — variant 2: label + icon buttons ── */
+.donate-2 {
+  height: 44px; display: flex; align-items: center; padding: 0 12px;
+}
+.donate-2 .donate-lbl {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: "JetBrains Mono", monospace; font-size: 9px;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--fg-faint);
+}
+.donate-2 .donate-lbl .donate-heart { color: var(--accent); display: inline-flex; }
+.donate-2 .donate-lbl svg { width: 12px; height: 12px; display: block; }
+.donate-2 .donate-spacer { flex: 1; }
+.donate-2 .donate-icons { display: flex; gap: 4px; }
+.donate-2 .donate-icons a {
+  width: 28px; height: 28px; border-radius: 6px;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--fg-soft); cursor: pointer; transition: all .15s; text-decoration: none;
+}
+.donate-2 .donate-icons a:hover { background: var(--paper); color: var(--fg); }
+.donate-2 .donate-icons svg { width: 15px; height: 15px; display: block; }
+
+/* ── Surface 6 · Try Pro pill (toolbar) ── */
+.trypro {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 500; font-size: 12px;
+  color: var(--fg-soft);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 5px 10px;
+  display: inline-flex; align-items: center; gap: 5px;
+  cursor: pointer; transition: all .15s ease;
+  text-decoration: none; white-space: nowrap;
+}
+.trypro:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.trypro svg { width: 11px; height: 11px; display: block; }
+
+/* ── Surface 6 · Pro section in sidebar ── */
+.side-pro {
+  flex: 0 0 auto;
+  border-top: 1px solid var(--line);
+  background: var(--paper-2);
+  padding: 12px 12px 16px;
+}
+.side-pro .pro-sec-label {
+  display: block;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px; font-weight: 500;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--fg-faint); margin-bottom: 6px;
+}
+.side-pro .pro-row { padding: 5px 0; font-size: 12.5px; }
+.side-pro .pro-cta { font-size: 12.5px; padding: 8px; margin-top: 8px; }
+
+.pro-section {
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+  margin-top: 2px;
+  display: flex; flex-direction: column; gap: 9px;
+}
+.pro-section .pro-sec-label {
+  font-family: "JetBrains Mono", monospace; font-size: 10px;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--fg-faint);
+}
+.pro-row {
+  display: flex; align-items: center; gap: 9px; padding: 7px 0;
+  font-size: 13px; color: var(--fg-faint); cursor: pointer;
+  transition: color .12s; text-decoration: none;
+}
+.pro-row:hover { color: var(--fg); }
+.pro-row .pro-lock { margin-left: auto; color: var(--fg-faint); display: inline-flex; }
+.pro-row .pro-lock svg { width: 12px; height: 12px; display: block; }
+.pro-cta {
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  margin-top: 6px; width: 100%;
+  background: var(--accent); color: var(--accent-ink);
+  border: none; border-radius: 7px; padding: 10px;
+  font-family: "Space Grotesk", sans-serif; font-weight: 600; font-size: 14px;
+  cursor: pointer; transition: filter .15s; text-decoration: none;
+}
+.pro-cta:hover { filter: brightness(1.06); }
+.pro-cta svg { width: 13px; height: 13px; display: block; }
+
+/* ── Download combobox ── */
+.dl-combo {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+.dl-combo__main {
+  border-radius: 7px 0 0 7px;
+  border-right: 1px solid color-mix(in oklab, var(--accent-ink) 20%, var(--accent));
+}
+.dl-combo__arrow {
+  border-radius: 0 7px 7px 0;
+  padding: 9px 10px;
+  min-width: 0;
+}
+.dl-combo__arrow.open { filter: brightness(1.1); }
+
+.dl-combo__menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 180px;
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  z-index: 200;
+  overflow: hidden;
+}
+.dl-combo__item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .12s;
+  text-decoration: none;
+  color: var(--fg);
+}
+.dl-combo__item:hover { background: var(--paper-2); }
+.dl-combo__item--active { color: var(--fg); }
+.dl-combo__item--locked {
+  color: var(--fg-faint);
+  border-top: 1px solid var(--line);
+  justify-content: space-between;
+}
+.dl-combo__item--locked:hover { color: var(--fg-soft); }
+.dl-combo__item-label { flex: 1; }
+.dl-combo__lock {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
 }

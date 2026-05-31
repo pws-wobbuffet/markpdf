@@ -105,31 +105,6 @@ export default function PrintOptionsPanel({ options, onChange, onClose }) {
           </select>
         </div>
 
-        <div className="po-group">
-          <span className="po-label">Custom Google Font</span>
-          <div className="po-custom-row">
-            <input
-              className="po-input"
-              type="text"
-              placeholder={`Font name or Google Fonts URL`}
-              value={inputVal}
-              onChange={(e) => setInputVal(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && applyCustomFont()}
-              onBlur={applyCustomFont}
-            />
-            {options.customFontName && (
-              <button className="po-clear-btn" onClick={clearCustomFont} title="Remove">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                  <path d="M6 6l12 12M18 6L6 18"/>
-                </svg>
-              </button>
-            )}
-          </div>
-          {options.customFontName
-            ? <span className="po-custom-status ok">✓ {options.customFontName}</span>
-            : <span className="po-custom-status">e.g. Playfair Display · or paste a URL</span>
-          }
-        </div>
 
         <div className="po-group">
           <span className="po-label">Font size</span>
