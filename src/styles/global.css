@@ -191,6 +191,11 @@ body {
 .ep-wrap > .pane { border-right: none; }
 /* Preview pane expands to fill remaining ep-wrap space after the editor */
 .preview-pane { flex: 1 1 0; min-width: 0; }
+/* Use paper-2 throughout so background is uniform when scrolled */
+.preview-pane,
+.preview-pane .pane-body { background: var(--paper-2); }
+/* Grab cursor signals the pane is pannable */
+.preview-pane .pane-body { cursor: grab; }
 
 .pane-divider {
   flex: 0 0 5px;
@@ -302,6 +307,7 @@ html[data-theme="dark"] .doc-item:not(.active):hover { background: var(--line); 
   justify-content: center;
   background: var(--paper-2);
   min-height: 100%;
+  min-width: 100%; /* prevent background gap when sheet is narrower than pane */
 }
 
 /* ── Custom scrollbars (tame the Windows/Linux native look) ── */
@@ -485,6 +491,7 @@ html[data-theme="dark"] .po-input { background: var(--paper-2); }
   transition: background 100ms ease, color 100ms ease;
 }
 .zoom-pct:hover { background: var(--paper); color: var(--fg); }
+.zoom-center-btn { width: 26px; border-left: 1px solid var(--line); margin-left: 1px; }
 
 /* ── Mobile (screen only — must not affect @media print) ── */
 @media screen and (max-width: 900px) {

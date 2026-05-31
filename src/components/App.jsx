@@ -254,6 +254,7 @@ export default function App() {
             onZoomIn={zoomIn}
             onZoomOut={zoomOut}
             onZoomReset={zoomReset}
+            onSetZoom={setPreviewZoom}
           />
         </div>
 
