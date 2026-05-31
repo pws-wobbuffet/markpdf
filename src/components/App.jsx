@@ -4,7 +4,7 @@ import Sidebar from './Sidebar';
 import Editor from './Editor';
 import Preview from './Preview';
 import PrintOptionsPanel, {
-  DEFAULT_PRINT_OPTIONS, FONTS, SIZES, SPACINGS, MARGINS, PAGE_SIZES,
+  DEFAULT_PRINT_OPTIONS, FONTS, SIZES, SPACINGS, MARGINS,
 } from './PrintOptionsPanel';
 
 const STORE_KEY = 'markpdf.docs';
@@ -185,7 +185,7 @@ export default function App() {
 
   const downloadPDF = () => {
     const marginMm = MARGINS[printOptions.margins]?.value   ?? '20';
-    const pageSize  = PAGE_SIZES[printOptions.pageSize]?.value ?? 'A4 portrait';
+    const pageSize  = 'A4 portrait'; // always A4; page size option removed
 
     // Remove any leftover override from a previous call
     document.getElementById('markpdf-page-override')?.remove();

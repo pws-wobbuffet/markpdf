@@ -16,14 +16,9 @@ export const FONTS = {
 export const SIZES     = { sm: { label: 'S', value: '13px' }, md: { label: 'M', value: '16px' }, lg: { label: 'L', value: '19px' } };
 export const SPACINGS  = { compact: { label: 'Tight', value: '1.5' }, regular: { label: 'Regular', value: '1.7' }, relaxed: { label: 'Loose', value: '2.0' } };
 export const MARGINS   = { narrow: { label: 'Narrow', value: '12' }, normal: { label: 'Normal', value: '20' }, wide: { label: 'Wide', value: '30' } };
-export const PAGE_SIZES = {
-  a4:     { label: 'A4',     value: 'A4 portrait' },
-  letter: { label: 'Letter', value: 'letter portrait' },
-  a5:     { label: 'A5',     value: 'A5 portrait' },
-};
 
 export const DEFAULT_PRINT_OPTIONS = {
-  font: 'newsreader', size: 'md', spacing: 'regular', margins: 'normal', pageSize: 'a4',
+  font: 'newsreader', size: 'md', spacing: 'regular', margins: 'normal',
   customFontUrl: '', customFontName: '',
 };
 
@@ -148,11 +143,6 @@ export default function PrintOptionsPanel({ options, onChange, onClose }) {
           <span className="po-label">Page margins</span>
           <Seg options={MARGINS}    value={options.margins}  onChange={set('margins')} />
         </div>
-        <div className="po-group">
-          <span className="po-label">Page size</span>
-          <Seg options={PAGE_SIZES} value={options.pageSize} onChange={set('pageSize')} />
-        </div>
-
         <p className="po-hint">Changes apply to the preview and the downloaded PDF.</p>
       </div>
     </aside>

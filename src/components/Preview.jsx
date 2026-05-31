@@ -12,8 +12,17 @@ export default function Preview({
     catch { return '<p>Parse error</p>'; }
   }, [content]);
 
-  const paneBodyRef = useRef(null);
+  const paneBodyRef   = useRef(null);
+  const shouldCenterRef = useRef(false);
   const pct = Math.round(zoom * 100);
+
+  // After a fit-to-width click, zoom changes → this useEffect fires → scrolls to 0,0
+  useEffect(() => {
+    if (!shouldCenterRef.current) return;
+    shouldCenterRef.current = false;
+    const el = paneBodyRef.current;
+    if (el) { el.scrollLeft = 0; el.scrollTop = 0; }
+  }, [zoom]);
 
   // ── Smooth zoom: Cmd+Scroll (Mac), Ctrl+Scroll (Win/Linux), trackpad pinch ──
   // Browsers report pinch as wheel+ctrlKey; Cmd+scroll as wheel+metaKey.
@@ -69,12 +78,16 @@ export default function Preview({
     };
   }, []);
 
-  // ── Center: scroll pane to horizontally center the sheet ──
+  // ── Fit to width: zoom so the sheet fills the pane, then scroll to 0,0 ──
+  // Sheet is 620px wide; preview-wrap padding adds 56px (28px × 2).
+  // At fitZoom the layout width = 620 × fitZoom = paneWidth − 56, so no overflow
+  // and scrollLeft = 0 is already the correct centered position.
   const handleCenter = () => {
     const el = paneBodyRef.current;
-    if (!el) return;
-    el.scrollLeft = (el.scrollWidth - el.clientWidth) / 2;
-    el.scrollTop  = 0;
+    if (!el || !onSetZoom) return;
+    const fitZoom = Math.min(2.0, Math.max(0.25, (el.clientWidth - 56) / 620));
+    shouldCenterRef.current = true; // useEffect([zoom]) will scroll to 0,0 after re-render
+    onSetZoom(fitZoom);
   };
 
   return (
