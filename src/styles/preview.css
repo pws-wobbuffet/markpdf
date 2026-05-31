@@ -1,8 +1,8 @@
 /* ── Preview sheet — the rendered document ── */
 .sheet {
   background: var(--paper);
-  width: 100%;
-  max-width: 620px;
+  width: 620px;    /* fixed — text never reflows when pane is resized */
+  flex-shrink: 0;  /* don't shrink in flex context (preview-wrap) */
   padding: 44px 48px;
   /* These three are controlled by PDF options; CSS vars are set from JS.
      Fallbacks match the original defaults so the app works without JS. */
@@ -132,10 +132,10 @@ html[data-theme="dark"] .sheet.shadowed { box-shadow: 0 16px 40px -16px rgba(0,0
      font-family, font-size, line-height, color, list markers, blockquote,
      code backgrounds — all inherited from .sheet above, nothing overridden. */
   .sheet {
-    max-width: 100% !important;
-    width: 100%    !important;
-    padding: 0     !important;
-    border: none   !important;
+    width: 100%      !important;  /* fill the full print page */
+    flex-shrink: 1   !important;  /* allow shrinking in print context */
+    padding: 0       !important;
+    border: none     !important;
     box-shadow: none !important;
     border-radius: 0 !important;
   }

@@ -171,13 +171,40 @@ body {
 }
 .btn-primary:hover { filter: brightness(1.06); }
 
-/* ── Body grid ── */
+/* ── Body layout ── */
 .main-area {
-  display: grid;
-  grid-template-columns: var(--sidebar-w) minmax(0,1fr) minmax(0,1fr);
+  display: flex;
   min-height: 0;
   overflow: hidden;
 }
+.main-area > .pane.docs { flex: 0 0 var(--sidebar-w); }
+.main-area > .po-pane   { flex: 0 0 240px; }
+
+/* Editor + Preview wrapper — flex: 1 so it fills between sidebar and options */
+.ep-wrap {
+  flex: 1;
+  display: flex;
+  min-width: 0;
+  overflow: hidden;
+}
+/* Suppress default pane right border; the divider handles separation */
+.ep-wrap > .pane { border-right: none; }
+
+.pane-divider {
+  flex: 0 0 5px;
+  cursor: col-resize;
+  background: transparent;
+  border-left: 1px solid var(--line);
+  position: relative;
+  transition: background 100ms ease, border-color 100ms ease;
+  user-select: none;
+}
+.pane-divider:hover {
+  background: color-mix(in oklab, var(--accent) 12%, transparent);
+  border-left-color: var(--accent);
+}
+/* Wider invisible hit-target — 9px total without changing visual width */
+.pane-divider::after { content: ''; position: absolute; inset: 0 -4px; }
 
 .pane {
   background: var(--paper);
@@ -301,11 +328,8 @@ html[data-theme="dark"] .doc-item:not(.active):hover { background: var(--line); 
 .cm-scroller::-webkit-scrollbar-thumb:hover,
 .pane-body::-webkit-scrollbar-thumb:hover { background: var(--fg-faint); }
 
-/* ── 4th-column options sidebar ── */
-.main-area.with-options {
-  grid-template-columns: var(--sidebar-w) minmax(0,1fr) minmax(0,1fr) 240px;
-}
-
+/* ── Options sidebar (.with-options class no longer needs a separate rule;
+   .po-pane has flex: 0 0 240px so it always sizes itself correctly) ── */
 /* The options pane is a normal .pane — no extra positioning needed */
 .po-pane { background: var(--paper-2); }
 
@@ -437,7 +461,10 @@ html[data-theme="dark"] .po-input { background: var(--paper-2); }
   .app { height: auto; min-height: 100dvh; display: flex; flex-direction: column; }
 
   .main-area,
-  .main-area.with-options { grid-template-columns: 1fr; overflow: visible; }
+  .main-area.with-options { flex-direction: column; overflow: visible; }
+
+  .ep-wrap { flex-direction: column; }
+  .pane-divider { display: none; }
 
   .pane {
     border-right: none;

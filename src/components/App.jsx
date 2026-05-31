@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Toolbar from './Toolbar';
 import Sidebar from './Sidebar';
 import Editor from './Editor';
@@ -116,6 +116,29 @@ export default function App() {
     localStorage.setItem('markpdf.print', JSON.stringify(printOptions));
   }, [printOptions]);
 
+  // Resizable editor/preview split
+  const [editorFlex, setEditorFlex] = useState(50);
+  const epWrapRef = useRef(null);
+
+  const startDividerDrag = useCallback((e) => {
+    e.preventDefault();
+    const wrap = epWrapRef.current;
+    if (!wrap) return;
+    const onMove = (ev) => {
+      const rect = wrap.getBoundingClientRect();
+      const pct = Math.min(75, Math.max(25, ((ev.clientX - rect.left) / rect.width) * 100));
+      setEditorFlex(pct);
+    };
+    const onUp = () => {
+      document.body.style.cursor = '';
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+    };
+    document.body.style.cursor = 'col-resize';
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  }, []);
+
   // Documents
   const [docs, setDocs] = useState(_loadDocs);
   const [activeId, setActiveId] = useState(() => _loadActiveId(_loadDocs()));
@@ -202,21 +225,27 @@ export default function App() {
           onDelete={deleteDoc}
         />
 
-        <section className="pane">
-          <div className="pane-head">
-            Markdown
-            <span className="muted">{lineCount} lines</span>
-          </div>
-          <div className="pane-body" style={{ display: 'flex', flexDirection: 'column' }}>
-            <Editor content={activeDoc?.content ?? ''} onChange={updateContent} />
-          </div>
-        </section>
+        {/* Editor + drag divider + Preview share a flex wrapper so the
+            drag percentage is relative to just this area, not the full layout */}
+        <div className="ep-wrap" ref={epWrapRef}>
+          <section className="pane" style={{ flex: `0 0 ${editorFlex}%` }}>
+            <div className="pane-head">
+              Markdown
+              <span className="muted">{lineCount} lines</span>
+            </div>
+            <div className="pane-body" style={{ display: 'flex', flexDirection: 'column' }}>
+              <Editor content={activeDoc?.content ?? ''} onChange={updateContent} />
+            </div>
+          </section>
 
-        <Preview
-          content={activeDoc?.content ?? ''}
-          showOptions={showPrintOptions}
-          onToggleOptions={togglePrintOptions}
-        />
+          <div className="pane-divider" onPointerDown={startDividerDrag} />
+
+          <Preview
+            content={activeDoc?.content ?? ''}
+            showOptions={showPrintOptions}
+            onToggleOptions={togglePrintOptions}
+          />
+        </div>
 
         {showPrintOptions && (
           <PrintOptionsPanel
