@@ -139,6 +139,12 @@ export default function App() {
     window.addEventListener('pointerup', onUp);
   }, []);
 
+  // Preview zoom (CSS zoom property — affects layout, pane-body scrolls on overflow)
+  const [previewZoom, setPreviewZoom] = useState(1.0);
+  const zoomIn    = () => setPreviewZoom(z => Math.min(2.0, Math.round((z + 0.25) * 4) / 4));
+  const zoomOut   = () => setPreviewZoom(z => Math.max(0.25, Math.round((z - 0.25) * 4) / 4));
+  const zoomReset = () => setPreviewZoom(1.0);
+
   // Documents
   const [docs, setDocs] = useState(_loadDocs);
   const [activeId, setActiveId] = useState(() => _loadActiveId(_loadDocs()));
@@ -244,6 +250,10 @@ export default function App() {
             content={activeDoc?.content ?? ''}
             showOptions={showPrintOptions}
             onToggleOptions={togglePrintOptions}
+            zoom={previewZoom}
+            onZoomIn={zoomIn}
+            onZoomOut={zoomOut}
+            onZoomReset={zoomReset}
           />
         </div>
 

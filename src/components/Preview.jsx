@@ -3,18 +3,45 @@ import { marked } from 'marked';
 
 marked.setOptions({ gfm: true, breaks: false });
 
-export default function Preview({ content, showOptions, onToggleOptions }) {
+export default function Preview({ content, showOptions, onToggleOptions, zoom = 1, onZoomIn, onZoomOut, onZoomReset }) {
   const html = useMemo(() => {
     try { return marked.parse(content || ''); }
     catch { return '<p>Parse error</p>'; }
   }, [content]);
 
+  const pct = Math.round(zoom * 100);
+
   return (
-    <section className="pane preview-pane" style={{ borderRight: 'none' }}>
+    <section className="pane preview-pane">
       <div className="pane-head">
         Preview
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {/* Zoom controls */}
+          <div className="zoom-controls">
+            <button
+              className="zoom-btn"
+              onClick={onZoomOut}
+              disabled={zoom <= 0.25}
+              title="Zoom out"
+              aria-label="Zoom out"
+            >−</button>
+            <button
+              className="zoom-pct"
+              onClick={onZoomReset}
+              title="Reset to 100%"
+              aria-label={`Zoom ${pct}%, click to reset`}
+            >{pct}%</button>
+            <button
+              className="zoom-btn"
+              onClick={onZoomIn}
+              disabled={zoom >= 2.0}
+              title="Zoom in"
+              aria-label="Zoom in"
+            >+</button>
+          </div>
+
           <span className="muted">A4</span>
+
           <button
             className={`po-toggle-btn${showOptions ? ' active' : ''}`}
             onClick={onToggleOptions}
@@ -29,10 +56,12 @@ export default function Preview({ content, showOptions, onToggleOptions }) {
           </button>
         </div>
       </div>
+
       <div className="pane-body">
         <div className="preview-wrap">
           <article
             className="sheet shadowed"
+            style={{ zoom }}
             dangerouslySetInnerHTML={{ __html: html }}
           />
         </div>

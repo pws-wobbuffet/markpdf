@@ -134,6 +134,7 @@ html[data-theme="dark"] .sheet.shadowed { box-shadow: 0 16px 40px -16px rgba(0,0
   .sheet {
     width: 100%      !important;  /* fill the full print page */
     flex-shrink: 1   !important;  /* allow shrinking in print context */
+    zoom: 1          !important;  /* always print at 100%, ignore preview zoom */
     padding: 0       !important;
     border: none     !important;
     box-shadow: none !important;
