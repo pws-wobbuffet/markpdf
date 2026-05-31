@@ -184,23 +184,8 @@ export default function App() {
   };
 
   const downloadPDF = useCallback(async () => {
-    const [{ pdf }, { default: MarkdownPDF }] = await Promise.all([
-      import('@react-pdf/renderer'),
-      import('./PDFDocument'),
-    ]);
-
-    const blob = await pdf(
-      <MarkdownPDF content={activeDoc?.content ?? ''} printOptions={printOptions} />
-    ).toBlob();
-
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${activeDoc?.title || 'document'}.pdf`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    const { generatePDF } = await import('./PDFDocument');
+    await generatePDF(activeDoc?.content ?? '', printOptions, activeDoc?.title);
   }, [printOptions, activeDoc]);
 
   const lineCount = (activeDoc?.content ?? '').split('\n').length;
