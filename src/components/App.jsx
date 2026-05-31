@@ -183,9 +183,27 @@ export default function App() {
     if (activeId === id) { setActiveId(next[0].id); localStorage.setItem(ACTIVE_KEY, next[0].id); }
   };
 
-  const downloadPDF = useCallback(async () => {
-    const { generatePDF } = await import('./PDFDocument');
-    await generatePDF(activeDoc?.content ?? '', printOptions, activeDoc?.title);
+  const downloadPDF = useCallback(() => {
+    const marginMm = MARGINS[printOptions.margins]?.value ?? '20';
+
+    document.getElementById('markpdf-page-override')?.remove();
+    const pageStyle = document.createElement('style');
+    pageStyle.id = 'markpdf-page-override';
+    pageStyle.textContent = `@media print { @page { margin: ${marginMm}mm; size: A4 portrait; } }`;
+    document.head.appendChild(pageStyle);
+
+    const prev = document.title;
+    document.title = activeDoc?.title || 'document';
+
+    setTimeout(() => {
+      window.print();
+      const cleanup = () => {
+        document.title = prev;
+        pageStyle.remove();
+        window.removeEventListener('focus', cleanup);
+      };
+      window.addEventListener('focus', cleanup);
+    }, 50);
   }, [printOptions, activeDoc]);
 
   const lineCount = (activeDoc?.content ?? '').split('\n').length;
