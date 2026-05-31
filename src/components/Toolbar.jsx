@@ -45,6 +45,20 @@ export default function Toolbar({ title, onTitleChange, onDownloadPDF, theme, on
         100% local
       </span>
 
+      {/* Surface 6 — Try Pro pill */}
+      <a
+        className="trypro"
+        href="https://markpdf-pro.pages.dev"
+        target="_blank"
+        rel="noopener"
+        title="markpdf pro — cloud sync, DOCX export, custom themes"
+      >
+        Try Pro
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M9 3h4v4"/><path d="M13 3l-6 6"/><path d="M11 9v3.5H3.5V5H7"/>
+        </svg>
+      </a>
+
       <button
         className="icon-btn"
         onClick={onThemeToggle}
